@@ -3,9 +3,11 @@ require 'date'
 
 class Teacher < ActiveRecord::Base
 
-  validates :name, :email, :phone_number :presence => true
-  # validates :email, :uniqueness => true
-  # has_and_belongs_to_many :students
+  has_many :students, :foreign_key => :student_id
+
+  validates :name, :email, :phone_number, :presence => true
+  validates :email, :uniqueness => true
+
 
 
 end
