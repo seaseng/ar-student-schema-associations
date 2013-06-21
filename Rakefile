@@ -1,11 +1,7 @@
-require 'rake'
-require 'rspec/core/rake_task'
+
 require_relative 'db/config'
 require_relative 'lib/students_importer'
-require_relative 'app/models/teacher'
-require_relative 'app/models/student'
-require 'faker'
-require 'date'
+
 
 
 desc "create the database"
@@ -63,10 +59,33 @@ end
 
 desc "assign student to teachers equally"
 task "db:assign_students" do
+  teacher_ids = Teacher.pluck(:id)
+  student_ids = Student.pluck(:id)
 
-  
+  Student.all.each do |student|
+    student.teacher_id = teacher_ids.sample
+    student.save
+  end
+
+  # 100.times do
+  #   StudentTeacher.create(teacher_id: ids1.sample, student_id: ids2.sample)
+  # end
 
 end
+
+
+desc "assign student teacher table"
+task "db:assign" do
+  teacher_ids = Teacher.pluck(:id)
+  student_ids = Student.pluck(:id)
+
+  50.times do
+    StudentTeacher.create(teacher_id: teacher_ids.sample, student_id: student_ids.sample)
+  end
+
+end
+
+
 
 
 desc 'Retrieves the current schema version number'

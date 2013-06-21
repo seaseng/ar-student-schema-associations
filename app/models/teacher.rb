@@ -1,9 +1,11 @@
 require_relative '../../db/config'
-require 'date'
+
 
 class Teacher < ActiveRecord::Base
 
-  has_many :students #,:foreign_key => :student_id
+  has_many :student_teachers, :foreign_key => :teacher_id
+  has_many :students, :through => :student_teachers
+
   validates :name, :email, :phone_number, :presence => true
   validates :email, :uniqueness => true
 
