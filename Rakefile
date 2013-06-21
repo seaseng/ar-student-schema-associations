@@ -5,6 +5,7 @@ require_relative 'lib/students_importer'
 require_relative 'app/models/teacher'
 require_relative 'app/models/student'
 require 'faker'
+require 'date'
 
 
 desc "create the database"
@@ -26,13 +27,30 @@ task "db:migrate" do
   end
 end
 
+# desc "populate the test database with sample data"
+# task "db:populate" do
+#   StudentsImporter.import
+# end
+
 desc "populate the test database with sample data"
-task "db:populate" do
-  StudentsImporter.import
+task "db:seed_students" do
+  # StudentsImporter.import
+  54.times do
+    student = Student.new
+    student.name = Faker::Name.name
+    student.gender = ['Male', 'Female'].sample
+    student.birthday = Date.new(rand(1950..2012), rand(1..12), rand(1..28))
+    student.email = Faker::Internet.email
+    student.phone = Faker::PhoneNumber.phone_number
+    student.address = Faker::Address.street_address
+    student.save!
+  end
+
 end
 
+
 desc "populate the test database with sample teachers"
-task "db:populate_teachers" do
+task "db:seed_teachers" do
   9.times do 
     teacher = Teacher.new
     teacher.name = Faker::Name.name
@@ -42,6 +60,14 @@ task "db:populate_teachers" do
   end
 
 end
+
+desc "assign student to teachers equally"
+task "db:assign_students" do
+
+  
+
+end
+
 
 desc 'Retrieves the current schema version number'
 task "db:version" do
